@@ -4,6 +4,7 @@ from datetime import datetime
 from typing import List, Dict, Any
 from faststream import FastStream
 from faststream.rabbit import RabbitBroker
+from faststream.http import HttpBroker
 from pydantic_settings import BaseSettings
 import feedparser
 import httpx
@@ -45,7 +46,8 @@ Base.metadata.create_all(bind=engine)
 
 # Broker setup
 broker = RabbitBroker(settings.broker_url)
-app = FastStream()
+http_broker = HttpBroker()
+app = FastStream(broker, http_broker)
 
 # Logging
 logging.basicConfig(level=logging.INFO)
