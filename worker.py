@@ -141,5 +141,4 @@ async def process_news(message: Dict[str, Any]):
         raise
 
 if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run("worker:app", host="0.0.0.0", port=8001)
+    app.run()

@@ -11,6 +11,5 @@ dependencies = [
     "psycopg2-binary",
     "httpx",
     "ruff",
-    "uvicorn",
     "sqlalchemy>=2.0.0",
 ]
