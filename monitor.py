@@ -10,6 +10,8 @@ import httpx
 from sqlalchemy import create_engine, Column, Integer, String, Text, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+from fastapi import FastAPI
+from faststream.fastapi import FastStreamApp
 
 # Configuration
 class Settings(BaseSettings):
@@ -45,7 +47,8 @@ Base.metadata.create_all(bind=engine)
 
 # Broker setup
 broker = RabbitBroker(settings.broker_url)
-app = AsgiFastStream(broker)
+app_fastapi = FastAPI()
+faststream_app = FastStreamApp(app_fastapi, broker)
 
 # Logging
 logging.basicConfig(level=logging.INFO)
@@ -114,12 +117,12 @@ async def publish_news_to_queue(news_list: List[Dict[str, Any]]):
     
     return new_items_count
 
-@app.get("/health")
+@faststream_app.get("/health")
 async def health_check():
     """Health check endpoint"""
     return {"status": "ok"}
 
-@app.post("/refresh")
+@faststream_app.post("/refresh")
 async def refresh_feeds():
     """Force refresh RSS feeds and publish new items"""
     logger.info("Starting manual refresh of RSS feeds")
@@ -175,11 +178,11 @@ async def periodic_polling():
         await asyncio.sleep(300)
 
 # Start background task
-@app.after_startup
+@faststream_app.after_startup
 async def start_background_tasks():
     """Start background tasks after app startup"""
     asyncio.create_task(periodic_polling())
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("monitor:app", host="0.0.0.0", port=8000)
+    uvicorn.run("monitor:faststream_app", host="0.0.0.0", port=8000)
