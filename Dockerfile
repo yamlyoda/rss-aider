@@ -31,4 +31,3 @@ EXPOSE 8000 8001
 
 # Default command (can be overridden)
 CMD ["python", "monitor.py"]
-````
