@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Event-driven news monitoring system"
 authors = [{ name = "Developer", email = "developer@example.com" }]
 dependencies = [
-    "faststream[rabbit]",
+    "faststream[rabbit,http]",
     "pydantic-settings",
     "feedparser",
     "spacy>=3.7.0",

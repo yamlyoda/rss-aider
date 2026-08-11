@@ -45,7 +45,7 @@ Base.metadata.create_all(bind=engine)
 
 # Broker setup
 broker = RabbitBroker(settings.broker_url)
-app = FastStream(broker)
+app = FastStream()
 
 # Logging
 logging.basicConfig(level=logging.INFO)
