@@ -69,6 +69,9 @@ logger = logging.getLogger(__name__)
 async def extract_entities(text: str) -> List[Dict[str, str]]:
     """Extract named entities from text using SpaCy"""
     try:
+        if not text:
+            return []
+            
         doc = nlp(text)
         entities = []
         
