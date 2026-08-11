@@ -2,7 +2,7 @@ import asyncio
 import logging
 from datetime import datetime
 from typing import List, Dict, Any
-from faststream.asgi import FastStream
+from faststream.asgi import AsgiFastStream
 from faststream.rabbit import RabbitBroker
 from pydantic_settings import BaseSettings
 import feedparser
@@ -45,7 +45,7 @@ Base.metadata.create_all(bind=engine)
 
 # Broker setup
 broker = RabbitBroker(settings.broker_url)
-app = FastStream(broker)
+app = AsgiFastStream(broker)
 
 # Logging
 logging.basicConfig(level=logging.INFO)
