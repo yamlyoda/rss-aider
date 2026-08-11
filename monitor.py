@@ -4,7 +4,6 @@ from datetime import datetime
 from typing import List, Dict, Any
 from faststream import FastStream
 from faststream.rabbit import RabbitBroker
-from faststream.http import HttpBroker
 from pydantic_settings import BaseSettings
 import feedparser
 import httpx
@@ -46,8 +45,7 @@ Base.metadata.create_all(bind=engine)
 
 # Broker setup
 broker = RabbitBroker(settings.broker_url)
-http_broker = HttpBroker()
-app = FastStream(broker, http_broker)
+app = FastStream(broker)
 
 # Logging
 logging.basicConfig(level=logging.INFO)
@@ -116,12 +114,12 @@ async def publish_news_to_queue(news_list: List[Dict[str, Any]]):
     
     return new_items_count
 
-@app.http("/health")
+@app.get("/health")
 async def health_check():
     """Health check endpoint"""
     return {"status": "ok"}
 
-@app.http("/refresh", methods=["POST"])
+@app.post("/refresh")
 async def refresh_feeds():
     """Force refresh RSS feeds and publish new items"""
     logger.info("Starting manual refresh of RSS feeds")
