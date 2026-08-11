@@ -31,5 +31,41 @@ services:
       timeout: 10s
       retries: 3
 
+  monitor:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=news
+      - DB_USER=postgres
+      - DB_PASSWORD=password
+      - BROKER_URL=amqp://guest:guest@rabbitmq:5672/
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    command: python monitor.py
+
+  worker:
+    build: .
+    ports:
+      - "8001:8001"
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=news
+      - DB_USER=postgres
+      - DB_PASSWORD=password
+      - BROKER_URL=amqp://guest:guest@rabbitmq:5672/
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    command: python worker.py
+
 volumes:
   postgres_data:

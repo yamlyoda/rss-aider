@@ -7,7 +7,7 @@ from faststream.rabbit import RabbitBroker
 from pydantic_settings import BaseSettings
 import feedparser
 import httpx
-from sqlalchemy import create_engine, Column, Integer, String, Text, DateTime, UniqueConstraint
+from sqlalchemy import create_engine, Column, Integer, String, Text, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
@@ -38,15 +38,6 @@ class News(Base):
     title = Column(String)
     link = Column(String, unique=True, index=True)
     content = Column(Text)
-    created_at = Column(DateTime, default=datetime.utcnow)
-
-class Entity(Base):
-    __tablename__ = "entities"
-    
-    id = Column(Integer, primary_key=True, index=True)
-    news_id = Column(Integer)
-    label = Column(String)
-    text = Column(String)
     created_at = Column(DateTime, default=datetime.utcnow)
 
 # Create tables
