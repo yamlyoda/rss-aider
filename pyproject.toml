@@ -1,0 +1,18 @@
+[project]
+name = "news-monitor"
+version = "0.1.0"
+description = "Event-driven news monitoring system"
+authors = [{ name = "Developer", email = "developer@example.com" }]
+dependencies = [
+    "faststream",
+    "pydantic-settings",
+    "feedparser",
+    "spacy>=3.7.0",
+    "ru-core-news-sm",
+    "psycopg2-binary",
+    "httpx",
+    "ruff",
+]
+
+[build-system]
+requires = ["setuptools", "wheel"]
