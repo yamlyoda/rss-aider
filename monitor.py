@@ -60,21 +60,38 @@ async def fetch_rss_feed(feed_url: str) -> List[Dict[str, Any]]:
             response.raise_for_status()
             
             parsed = feedparser.parse(response.text)
+            
+            # Check if parsing was successful
+            if parsed.bozo and parsed.bozo_exception:
+                logger.warning(f"Feed {feed_url} has bozo errors: {parsed.bozo_exception}")
+            
             articles = []
             
             for entry in parsed.entries:
-                article = {
-                    "source": feed_url,
-                    "title": entry.get("title", ""),
-                    "link": entry.get("link", ""),
-                    "content": entry.get("summary", ""),
-                    "published": entry.get("published", "")
-                }
-                articles.append(article)
+                try:
+                    article = {
+                        "source": feed_url,
+                        "title": entry.get("title", ""),
+                        "link": entry.get("link", ""),
+                        "content": entry.get("summary", ""),
+                        "published": entry.get("published", "")
+                    }
+                    # Skip articles without essential fields
+                    if article["link"] and article["title"]:
+                        articles.append(article)
+                except Exception as e:
+                    logger.warning(f"Error processing entry from {feed_url}: {e}")
+                    continue
             
             return articles
+    except httpx.RequestError as e:
+        logger.error(f"Network error fetching RSS feed {feed_url}: {e}")
+        return []
+    except feedparser.ParseError as e:
+        logger.error(f"Parsing error for RSS feed {feed_url}: {e}")
+        return []
     except Exception as e:
-        logger.error(f"Ошибка при получении RSS-канала {feed_url}: {e}")
+        logger.error(f"Unexpected error fetching RSS feed {feed_url}: {e}")
         return []
 
 async def publish_news_to_queue(news_list: List[Dict[str, Any]]):
