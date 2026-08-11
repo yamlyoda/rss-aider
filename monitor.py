@@ -2,7 +2,7 @@ import asyncio
 import logging
 from datetime import datetime
 from typing import List, Dict, Any
-from faststream import FastStream
+from faststream.asgi import FastStream
 from faststream.rabbit import RabbitBroker
 from pydantic_settings import BaseSettings
 import feedparser
