@@ -105,7 +105,7 @@ async def publish_news_to_queue(news_list: List[Dict[str, Any]]):
             existing = db.query(News).filter_by(link=article["link"]).first()
             if not existing:
                 # Create and publish new news item
-                await broker.publish(article, "news_queue")
+                await broker.publish(article, queue="news_queue")
                 new_items_count += 1
         except Exception as e:
             logger.error(f"Error checking/publishing article {article['link']}: {e}")
@@ -114,12 +114,12 @@ async def publish_news_to_queue(news_list: List[Dict[str, Any]]):
     
     return new_items_count
 
-@app.get("/health")
+@app.http("/health")
 async def health_check():
     """Health check endpoint"""
     return {"status": "ok"}
 
-@app.post("/refresh")
+@app.http("/refresh", methods=["POST"])
 async def refresh_feeds():
     """Force refresh RSS feeds and publish new items"""
     logger.info("Starting manual refresh of RSS feeds")

@@ -141,4 +141,5 @@ async def process_news(message: Dict[str, Any]):
         raise
 
 if __name__ == "__main__":
-    app.run()
+    import asyncio
+    asyncio.run(app.run())
