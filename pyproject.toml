@@ -8,11 +8,11 @@ dependencies = [
     "pydantic-settings",
     "feedparser",
     "spacy>=3.7.0",
-    "ru-core-news-sm",
     "psycopg2-binary",
     "httpx",
     "ruff",
     "uvicorn",
+    "sqlalchemy>=2.0.0",
 ]
 
 [build-system]
