@@ -83,7 +83,7 @@ async def extract_entities(text: str) -> List[Dict[str, str]]:
         
         return entities
     except Exception as e:
-        logger.error(f"Error extracting entities: {e}")
+        logger.error(f"Ошибка при извлечении сущностей: {e}")
         return []
 
 @broker.subscriber("news_queue")

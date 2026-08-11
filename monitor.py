@@ -74,7 +74,7 @@ async def fetch_rss_feed(feed_url: str) -> List[Dict[str, Any]]:
             
             return articles
     except Exception as e:
-        logger.error(f"Error fetching RSS feed {feed_url}: {e}")
+        logger.error(f"Ошибка при получении RSS-канала {feed_url}: {e}")
         return []
 
 async def publish_news_to_queue(news_list: List[Dict[str, Any]]):
